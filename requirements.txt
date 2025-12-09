@@ -1,0 +1,20 @@
+# Requirements para Leitor de Arquivos REM e RET
+# 
+# Este projeto utiliza apenas bibliotecas padrão do Python.
+# Nenhuma dependência externa é necessária.
+
+# Versão mínima do Python necessária
+# Python >= 3.6
+
+# Bibliotecas padrão utilizadas:
+# - os (built-in)
+# - csv (built-in)
+# - pathlib (built-in desde Python 3.4+)
+# - datetime (built-in)
+
+# Para verificar sua versão do Python:
+# python3 --version
+
+# Instalação não é necessária, apenas execute:
+# python3 leitor_rem.py
+
