@@ -78,7 +78,7 @@ class RetExtractor:
         nosso_numero = linha[63:80] if len(linha) >= 80 else ""
         controle_participante = linha[38:63] if len(linha) >= 63 else ""
         meu_numero = linha[116:126] if len(linha) >= 126 else ""
-        codigo_ocorrencia = linha[108:110] if len(linha) >= 110 else ""
+        codigo_ocorrencia = linha[106:108] if len(linha) >= 108 else ""
         data_liquidacao = linha[110:116] if len(linha) >= 116 else ""
         data_vencimento = linha[146:152] if len(linha) >= 152 else ""
         valor_titulo = linha[152:165] if len(linha) >= 165 else ""

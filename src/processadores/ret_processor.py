@@ -1,5 +1,6 @@
 from src.utils.formatadores import formatar_data, formatar_valor
 from src.utils.ocorrencias import obter_descricao_ocorrencia
+from src.utils.comandos import obter_descricao_comando
 from src.utils.arquivo import gravar_substring
 
 
@@ -102,9 +103,9 @@ class RetProcessor:
     @staticmethod
     def _processar_detalhe(saida, linha, unico_detalhe):
         if unico_detalhe:
-            cabecalho = "NOSSO NUMERO          CONTROLE PARTICIPANTE              MEU NUMERO       COD OCORR DESCRICAO DA OCORRENCIA                            DATA LIQUIDACAO DATA VENCIMENTO VALOR TITULO AG RECEBEDORA DATA CREDITO DESCONTO CONCEDIDO VALOR RECEBIDO"
+            cabecalho = "NOSSO NUMERO          CONTROLE PARTICIPANTE              CARTEIRA MEU NUMERO       COMANDO DESCRICAO COMANDO                            DATA LIQUIDACAO DATA VENCIMENTO VALOR TITULO AG RECEBEDORA DATA CREDITO DESCONTO CONCEDIDO VALOR RECEBIDO"
             gravar_substring(saida, cabecalho)
-            cabecalho = "-" * 225
+            cabecalho = "-" * 275
             gravar_substring(saida, cabecalho)
 
         nosso_numero = linha[63:80] if len(linha) >= 80 else ""
@@ -113,16 +114,18 @@ class RetProcessor:
         controle_participante = linha[38:63] if len(linha) >= 63 else ""
         controle_participante = controle_participante[:25].strip()
 
-        meu_numero = linha[116:126] if len(linha) >= 126 else ""
-        meu_numero = meu_numero[:10].strip()
+        carteira = linha[106:108] if len(linha) >= 108 else ""
+        carteira = carteira.strip()
 
-        codigo_ocorrencia = linha[108:110] if len(linha) >= 110 else ""
-        codigo_ocorrencia = codigo_ocorrencia.strip()
-
-        descricao_ocorrencia = obter_descricao_ocorrencia(codigo_ocorrencia)
+        comando = linha[108:110] if len(linha) >= 110 else ""
+        comando = comando.strip()
+        descricao_comando = obter_descricao_comando(comando)
 
         data_liquidacao = linha[110:116] if len(linha) >= 116 else ""
         data_liquidacao = formatar_data(data_liquidacao[:6]) if len(data_liquidacao) >= 6 and data_liquidacao.strip() and data_liquidacao.strip() != "000000" else "00/00/00"
+
+        meu_numero = linha[116:126] if len(linha) >= 126 else ""
+        meu_numero = meu_numero[:10].strip()
 
         data_vencimento = linha[146:152] if len(linha) >= 152 else ""
         data_vencimento = formatar_data(data_vencimento[:6]) if len(data_vencimento) >= 6 and data_vencimento.strip() and data_vencimento.strip() != "000000" else "00/00/00"
@@ -144,9 +147,10 @@ class RetProcessor:
 
         substring = (nosso_numero.ljust(21) +
                     controle_participante.ljust(32) +
+                    carteira.ljust(9) +
                     meu_numero.ljust(17) +
-                    codigo_ocorrencia.ljust(12) +
-                    descricao_ocorrencia[:50].ljust(50) +
+                    comando.ljust(8) +
+                    descricao_comando[:45].ljust(45) +
                     data_liquidacao.ljust(15) +
                     data_vencimento.ljust(15) +
                     valor_titulo.ljust(13) +
@@ -163,14 +167,14 @@ class RetProcessor:
         valor_total = linha[23:35] if len(linha) >= 35 else ""
         valor_total = formatar_valor(valor_total[:12])
 
-        cabecalho = "-" * 225
+        cabecalho = "-" * 275
         gravar_substring(saida, cabecalho)
         gravar_substring(saida, f"Total de Registros: {total_registros.strip()}")
         gravar_substring(saida, f"Valor Total: {valor_total}")
     
     @staticmethod
     def _gravar_rodape(saida, nlinhas):
-        cabecalho = "-" * 225
+        cabecalho = "-" * 275
         gravar_substring(saida, cabecalho)
         substring = f"Total de Lancamentos Processados: {nlinhas}"
         gravar_substring(saida, substring)
